@@ -98,7 +98,6 @@ describe 'Items API' do
 
   it 'can destroy an item' do
     item = create(:item)
-    
 
     expect(Item.count).to eq(1)
 
@@ -107,5 +106,28 @@ describe 'Items API' do
     expect(response).to be_successful
     expect(Item.count).to eq(0)
     expect { Item.find(item.id) }.to raise_error(ActiveRecord::RecordNotFound)
+  end
+
+  it 'when it destroys an item it destroys any invoices where it was the only item' do
+    merchant = create(:merchant)
+    item1 = create(:item, merchant: merchant)
+    item2 = create(:item, merchant: merchant)
+    invoice1 = create(:invoice, merchant: merchant)
+    invoice2 = create(:invoice, merchant: merchant)
+    create(:invoice_item, item: item1, invoice: invoice1)
+    create(:invoice_item, item: item1, invoice: invoice2)
+    create(:invoice_item, item: item2, invoice: invoice2)
+
+    expect(Invoice.count).to eq(2)
+    expect(InvoiceItem.count).to eq(3)
+
+    delete "/api/v1/items/#{item1.id}"
+
+    expect(response).to be_successful
+
+    expect(Invoice.count).to eq(1)
+    expect(InvoiceItem.count).to eq(1)
+
+    expect { Invoice.find(invoice1.id) }.to raise_error(ActiveRecord::RecordNotFound)
   end
 end

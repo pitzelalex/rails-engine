@@ -1,6 +1,4 @@
 class Api::V1::ItemsController < ApplicationController
-  before_destroy :delete_invoice
-
   def index
     render json: ItemSerializer.new(Item.all)
   end
@@ -19,7 +17,9 @@ class Api::V1::ItemsController < ApplicationController
   end
 
   def destroy
-    render json: Item.destroy(params[:id])
+    @item = Item.find(params[:id])
+    destroy_invoices
+    @item.destroy
   end
 
   private
@@ -28,7 +28,9 @@ class Api::V1::ItemsController < ApplicationController
     params.require(:item).permit(:name, :description, :unit_price, :merchant_id)
   end
 
-  def delete_invoice
-    require 'pry'; binding.pry
+  def destroy_invoices
+    @item.invoices.each do |invoice|
+      invoice.destroy if invoice.items.include?(@item) && invoice.items.count == 1
+    end
   end
 end
