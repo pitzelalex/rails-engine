@@ -33,4 +33,26 @@ describe 'Merchants API' do
     expect(merchants[:data]).to be_an Array
     expect(merchants[:data].count).to eq(0)
   end
+
+  it 'sends a single merchant' do
+    m1 = create(:merchant)
+    m2 = create(:merchant)
+
+    get "/api/v1/merchants/#{m1.id}"
+
+    expect(response).to be_successful
+
+    merchant = JSON.parse(response.body, symbolize_names: true)
+
+    expect(merchant).to have_key(:data)
+    expect(merchant[:data]).to be_a Hash
+    expect(merchant[:data]).to have_key(:attributes)
+    expect(merchant[:data][:attributes]).to be_a Hash
+    expect(merchant[:data][:attributes]).to have_key(:name)
+    expect(merchant[:data][:attributes][:name]).to be_a String
+
+    get "/api/v1/merchants/#{m2.id}"
+
+    expect(response).to be_successful
+  end
 end
