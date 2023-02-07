@@ -73,15 +73,39 @@ describe 'Merchants API' do
   it 'sends a list of a merchants items' do
     m1 = create(:merchant_with_items, num: 5)
     m2 = create(:merchant_with_items, num: 5)
+    m3 = create(:merchant)
 
     get "/api/v1/merchants/#{m1.id}/items"
 
     expect(response).to be_successful
 
-    # items = JSON.parse(response.body, symbolize_names: true)
+    items = JSON.parse(response.body, symbolize_names: true)
 
-    # expect(items).to have_key(:data)
-    # expect(items[:data]).to be_an Array
-    # expect(items[:data].count).to eq(5)
+    expect(items).to have_key(:data)
+    expect(items[:data]).to be_an Array
+    expect(items[:data].count).to eq(5)
+    items[:data].each do |i|
+      expect(i).to have_key(:id)
+      expect(i[:id]).to be_a String
+      expect(i).to have_key(:attributes)
+      expect(i[:attributes]).to be_a Hash
+      expect(i[:attributes].count).to eq(4)
+      expect(i[:attributes]).to have_key(:name)
+      expect(i[:attributes]).to have_key(:description)
+      expect(i[:attributes]).to have_key(:unit_price)
+      expect(i[:attributes]).to have_key(:merchant_id)
+      expect(i[:attributes][:name]).to be_a String
+      expect(i[:attributes][:description]).to be_a String
+      expect(i[:attributes][:unit_price]).to be_a Float
+      expect(i[:attributes][:merchant_id]).to be_an Integer
+    end
+
+    get "/api/v1/merchants/#{m3.id}/items"
+
+    expect(response).to be_successful
+
+    items = JSON.parse(response.body, symbolize_names: true)
+
+    expect(items[:data].count).to eq(0)
   end
 end
