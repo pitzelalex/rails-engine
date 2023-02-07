@@ -98,6 +98,7 @@ describe 'Items API' do
 
   it 'can destroy an item' do
     item = create(:item)
+    
 
     expect(Item.count).to eq(1)
 

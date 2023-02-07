@@ -1,4 +1,6 @@
 class Api::V1::ItemsController < ApplicationController
+  before_destroy :delete_invoice
+
   def index
     render json: ItemSerializer.new(Item.all)
   end
@@ -17,12 +19,16 @@ class Api::V1::ItemsController < ApplicationController
   end
 
   def destroy
-    render json: Item.delete(params[:id])
+    render json: Item.destroy(params[:id])
   end
 
   private
 
   def item_params
     params.require(:item).permit(:name, :description, :unit_price, :merchant_id)
+  end
+
+  def delete_invoice
+    require 'pry'; binding.pry
   end
 end
