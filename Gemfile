@@ -39,6 +39,7 @@ group :development, :test do
   gem 'factory_bot_rails'
   gem 'pry-rails'
   gem 'rspec-rails', '~> 3.5'
+  # gem 'jsonapi.rb'
   gem 'jsonapi-serializer'
 end
 

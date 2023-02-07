@@ -54,5 +54,19 @@ describe 'Merchants API' do
     get "/api/v1/merchants/#{m2.id}"
 
     expect(response).to be_successful
+
+    get "/api/v1/merchants/#{m2.id + 1}"
+
+    error = JSON.parse(response.body, symbolize_names: true)
+
+    expect(response).to_not be_successful
+
+    expect(error).to have_key(:errors)
+    expect(error[:errors]).to be_an Array
+    expect(error[:errors][0]).to be_a Hash
+    expect(error[:errors][0]).to have_key(:message)
+    expect(error[:errors][0]).to have_key(:code)
+    expect(error[:errors][0][:message]).to be_a String
+    expect(error[:errors][0][:code]).to be_a String
   end
 end
