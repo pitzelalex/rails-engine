@@ -94,6 +94,15 @@ describe 'Items API' do
     expect(response).to be_successful
     expect(item.name).not_to eq(previous_name)
     expect(item.name).to eq('Cool New Name')
+
+    item_params = { merchant_id: 9999999999 }
+    headers = { 'CONTENT_TYPE': 'application/json' }
+
+    patch "/api/v1/items/#{id}", headers: headers, params: JSON.generate({ item: item_params })
+
+    expect(response).to_not be_successful
+
+    # todo: Update expectations and format error json
   end
 
   it 'can destroy an item' do
