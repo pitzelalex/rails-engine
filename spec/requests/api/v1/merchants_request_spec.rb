@@ -69,4 +69,19 @@ describe 'Merchants API' do
     expect(error[:errors][0][:message]).to be_a String
     expect(error[:errors][0][:code]).to be_a String
   end
+
+  it 'sends a list of a merchants items' do
+    m1 = create(:merchant_with_items, num: 5)
+    m2 = create(:merchant_with_items, num: 5)
+
+    get "/api/v1/merchants/#{m1.id}/items"
+
+    expect(response).to be_successful
+
+    # items = JSON.parse(response.body, symbolize_names: true)
+
+    # expect(items).to have_key(:data)
+    # expect(items[:data]).to be_an Array
+    # expect(items[:data].count).to eq(5)
+  end
 end

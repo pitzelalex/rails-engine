@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Merchant, type: :model do
   describe 'relationships' do
-    # it { should have_many(:viewing_parties).with_foreign_key('host_id') } 
+    it { should have_many :items }
   end
 
   describe 'validations' do
