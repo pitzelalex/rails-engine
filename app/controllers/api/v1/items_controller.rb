@@ -13,13 +13,11 @@ class Api::V1::ItemsController < ApplicationController
   end
 
   def update
-    # require 'pry'; binding.pry if item_params[:merchant_id] == 999999999999
-    # item = Item.update(params[:id], item_params)
     item = Item.find(params[:id])
     if item.update(item_params)
       render json: ItemSerializer.new(item)
     else
-      render json: item.errors, status: 404
+      render json: ErrorSerializer.new(item), status: 404
     end
   end
 

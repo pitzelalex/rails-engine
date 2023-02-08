@@ -95,14 +95,23 @@ describe 'Items API' do
     expect(item.name).not_to eq(previous_name)
     expect(item.name).to eq('Cool New Name')
 
-    item_params = { merchant_id: 9999999999 }
+    item_params = { merchant_id: 999999999, unit_price: 'string' }
     headers = { 'CONTENT_TYPE': 'application/json' }
 
     patch "/api/v1/items/#{id}", headers: headers, params: JSON.generate({ item: item_params })
 
+    error_message = JSON.parse(response.body, symbolize_names: true)
+
     expect(response).to_not be_successful
 
-    # todo: Update expectations and format error json
+    expect(error_message).to have_key(:errors)
+    expect(error_message[:errors]).to be_an Array
+    error_message[:errors].each do |error|
+      expect(error).to have_key(:title)
+      expect(error[:title]).to be_a String
+      expect(error).to have_key(:detail)
+      expect(error[:detail]).to be_a String
+    end
   end
 
   it 'can destroy an item' do
