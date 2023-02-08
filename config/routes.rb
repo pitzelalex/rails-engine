@@ -8,6 +8,7 @@ Rails.application.routes.draw do
         end
       end
 
+      get 'items/find', to: 'items/find#show'
       resources :items do
         scope module: :items do
           resources 'merchant', only: %i[index]
