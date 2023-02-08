@@ -8,7 +8,11 @@ Rails.application.routes.draw do
         end
       end
 
-      resources :items
+      resources :items do
+        scope module: :items do
+          resources 'merchant', only: %i[index]
+        end
+      end
     end
   end
 end
