@@ -1,10 +1,11 @@
 class SimpleErrorSerializer
   attr_reader :errors
 
-  def initialize(message)
+  def initialize(message, status: 404)
     @errors = [
       {
-        message: message
+        detail: message,
+        status: status
       }
     ]
   end

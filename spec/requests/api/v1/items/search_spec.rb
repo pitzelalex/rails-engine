@@ -67,7 +67,8 @@ describe 'Items Search API' do
 
     error = JSON.parse(response.body, symbolize_names: true)
 
-    expect(error[:errors][0][:message]).to eq("Price can't be negative")
+    expect(error[:errors][0][:detail]).to eq("Price can't be negative")
+    expect(error[:errors][0][:status]).to eq(400)
 
     get '/api/v1/items/find?min_price=-300'
 
@@ -75,7 +76,8 @@ describe 'Items Search API' do
 
     error = JSON.parse(response.body, symbolize_names: true)
 
-    expect(error[:errors][0][:message]).to eq("Price can't be negative")
+    expect(error[:errors][0][:detail]).to eq("Price can't be negative")
+    expect(error[:errors][0][:status]).to eq(400)
   end
 
   it "can't search by price and name" do
@@ -85,7 +87,8 @@ describe 'Items Search API' do
 
     error = JSON.parse(response.body, symbolize_names: true)
 
-    expect(error[:errors][0][:message]).to eq("Can't search by name and price")
+    expect(error[:errors][0][:detail]).to eq("Can't search by name and price")
+    expect(error[:errors][0][:status]).to eq(400)
   end
 
   it "can't have empty or missing params" do
@@ -95,7 +98,8 @@ describe 'Items Search API' do
 
     error = JSON.parse(response.body, symbolize_names: true)
 
-    expect(error[:errors][0][:message]).to eq('Must include 1 valid search parameter')
+    expect(error[:errors][0][:detail]).to eq('Must include 1 valid search parameter')
+    expect(error[:errors][0][:status]).to eq(400)
 
     get '/api/v1/items/find?max_price'
 
@@ -103,7 +107,8 @@ describe 'Items Search API' do
 
     error = JSON.parse(response.body, symbolize_names: true)
 
-    expect(error[:errors][0][:message]).to eq("Price Can't be empty")
+    expect(error[:errors][0][:detail]).to eq("Price Can't be empty")
+    expect(error[:errors][0][:status]).to eq(400)
 
     get '/api/v1/items/find?name'
 
@@ -111,6 +116,7 @@ describe 'Items Search API' do
 
     error = JSON.parse(response.body, symbolize_names: true)
 
-    expect(error[:errors][0][:message]).to eq("Name Can't be empty")
+    expect(error[:errors][0][:detail]).to eq("Name Can't be empty")
+    expect(error[:errors][0][:status]).to eq(400)
   end
 end

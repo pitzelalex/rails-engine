@@ -40,7 +40,7 @@ class Api::V1::Items::FindController < ApplicationController
     params.permit(:max_price, :min_price)
   end
 
-  def send_error(message, code)
-    render json: SimpleErrorSerializer.new(message), status: code
+  def send_error(message, status)
+    render json: SimpleErrorSerializer.new(message, status: status), status: status
   end
 end
