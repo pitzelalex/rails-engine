@@ -32,7 +32,7 @@ describe 'Items API' do
     end
   end
 
-  it 'sends a list of items' do
+  it 'sends an item' do
     item1 = create(:item)
     create(:item)
 
