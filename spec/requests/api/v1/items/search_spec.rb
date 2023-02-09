@@ -87,4 +87,30 @@ describe 'Items Search API' do
 
     expect(error[:errors][0][:message]).to eq("Can't search by name and price")
   end
+
+  it "can't have empty or missing params" do
+    get '/api/v1/items/find'
+
+    expect(response).not_to be_successful
+
+    error = JSON.parse(response.body, symbolize_names: true)
+
+    expect(error[:errors][0][:message]).to eq('Must include 1 valid search parameter')
+
+    get '/api/v1/items/find?max_price'
+
+    expect(response).not_to be_successful
+
+    error = JSON.parse(response.body, symbolize_names: true)
+
+    expect(error[:errors][0][:message]).to eq("Price Can't be empty")
+
+    get '/api/v1/items/find?name'
+
+    expect(response).not_to be_successful
+
+    error = JSON.parse(response.body, symbolize_names: true)
+
+    expect(error[:errors][0][:message]).to eq("Name Can't be empty")
+  end
 end

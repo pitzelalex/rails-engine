@@ -22,7 +22,7 @@ class Api::V1::ItemsController < ApplicationController
   end
 
   def destroy
-    @item = Item.find(params[:id]) # .includes(:invoices)
+    @item = Item.includes(:invoices).find(params[:id])
     destroy_invoices
     @item.destroy
   end
