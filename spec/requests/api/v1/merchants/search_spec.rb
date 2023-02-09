@@ -26,7 +26,8 @@ describe 'Merchants Search API' do
 
     error = JSON.parse(response.body, symbolize_names: true)
 
-    expect(error[:errors][0][:message]).to eq('Must include 1 valid search parameter')
+    expect(error[:errors][0][:detail]).to eq('Must include 1 valid search parameter')
+    expect(error[:errors][0][:status]).to eq(400)
 
     get '/api/v1/merchants/find_all?name'
 
@@ -34,6 +35,7 @@ describe 'Merchants Search API' do
 
     error = JSON.parse(response.body, symbolize_names: true)
 
-    expect(error[:errors][0][:message]).to eq("Name Can't be empty")
+    expect(error[:errors][0][:detail]).to eq("Name Can't be empty")
+    expect(error[:errors][0][:status]).to eq(400)
   end
 end
