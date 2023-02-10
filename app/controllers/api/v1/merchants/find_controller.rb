@@ -1,7 +1,7 @@
 class Api::V1::Merchants::FindController < ApplicationController
   def index
     if params.keys.include?('name')
-      if params[:name].nil?
+      if params[:name].nil? || params[:name] == ''
         send_error("Name Can't be empty", 400)
       else
         merchants = Merchant.search_name(params[:name])
