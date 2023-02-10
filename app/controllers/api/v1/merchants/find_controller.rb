@@ -14,7 +14,7 @@ class Api::V1::Merchants::FindController < ApplicationController
 
   private
 
-  def send_error(message, code)
-    render json: SimpleErrorSerializer.new(message), status: code
+  def send_error(message, status)
+    render json: SimpleErrorSerializer.new(message, status: status), status: status
   end
 end
